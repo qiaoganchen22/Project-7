@@ -4,7 +4,6 @@ Project 7
 */
 
 
-
 #pragma once
 #include <iostream>
 #include <stack>
@@ -12,13 +11,13 @@ Project 7
 
 class PostfixCalculator{
 public:
-  //constructor
+  //construstor
   PostfixCalculator();
 
   //helper function
-  int one(char c);
-  bool two(char c);
-  bool three(std::string s);
+  int precedence(char c);
+  bool isOperator(char c);
+  bool balanced(std::string s);
 
   //member function
   std::string convertToPostfix(std::string infix_expression);

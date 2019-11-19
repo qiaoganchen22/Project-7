@@ -1,25 +1,23 @@
 /*Qiao Gan Chen
 november 19
-project 7
+Project 7
 */
-
-
 
 #include "PostfixCalculator.hpp"
 #include <fstream>
 
 PostfixCalculator::PostfixCalculator(){
-  //constructor
+  //constructor 
 }
 
-bool PostfixCalculator::two(char c){
+bool PostfixCalculator::isOperator(char c){
   if( c == '*' || c == '-' || c == '+' || c == '/'){
     return true;
   }
   return false;
 }
 
-int PostfixCalculator::one(char c){
+int PostfixCalculator::precedence(char c){
   if(c == '*' || c == '/'){
     return 5;
   }
@@ -29,7 +27,7 @@ int PostfixCalculator::one(char c){
   return 0;
 }
 
-bool PostfixCalculator::three(std::string s){
+bool PostfixCalculator::balanced(std::string s){
   int parenthesis=0;
   for(int i = 0; i < s.length(); i++){
     if(s[i] == '('){
@@ -47,7 +45,7 @@ bool PostfixCalculator::three(std::string s){
 
 
 std::string PostfixCalculator::convertToPostfix(std::string infix_expression){
-  if(!three(infix_expression)){
+  if(!balanced(infix_expression)){
     return "Precondition Violated Exception: Unbalanced parenthesis";
   }
   std::string postfix="";
@@ -63,16 +61,16 @@ std::string PostfixCalculator::convertToPostfix(std::string infix_expression){
     if(c == '('){
       OperatorStack.push(c);
     }
-    //operator
-    if(two(c)){
-      while(!OperatorStack.empty() && OperatorStack.top() != '(' && one(c) <= one(OperatorStack.top())){
+    //operators
+    if(isOperator(c)){
+      while(!OperatorStack.empty() && OperatorStack.top() != '(' && precedence(c) <= precedence(OperatorStack.top())){
 	postfix += " ";
 	postfix += OperatorStack.top();
 	OperatorStack.pop();
       }
       OperatorStack.push(c);
     }
-    //close parenthesis
+    //clsoe parenthesis
     if(c == ')'){
       while(OperatorStack.top() != '('){
 	postfix += " ";
@@ -81,8 +79,8 @@ std::string PostfixCalculator::convertToPostfix(std::string infix_expression){
       }
       OperatorStack.pop();
     }
-    if(!two(c)){
-      //preconvioatedexceptions
+    if(!isOperator(c)){
+      //precondition violated exception
       return "Precondition Violated Exception: Unknown operator";
     }
   }
